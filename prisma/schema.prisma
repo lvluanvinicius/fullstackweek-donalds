@@ -43,7 +43,7 @@ model Product {
   description    String
   price          Float
   imageUrl       String
-  ingridients    String[]
+  ingredients    String[]
   restaurantId   String
   menuCategoryId String
   orderProduct   OrderProduct[]
