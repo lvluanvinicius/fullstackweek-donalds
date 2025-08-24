@@ -2,31 +2,27 @@ import { useCart } from "@/app/[slug]/contexts/cart";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
+
+import CartProductItem from "./cart-product-item";
 
 const CartSheet = () => {
   const { toggleCart, isOpen, products } = useCart();
 
   return (
     <Sheet open={isOpen} onOpenChange={toggleCart}>
-      <SheetTrigger>Open</SheetTrigger>
-      <SheetContent>
+      <SheetContent className="w-[80%]">
         <SheetHeader>
-          <SheetTitle>Tete</SheetTitle>
-          <SheetDescription>Tete</SheetDescription>
+          <SheetTitle className="text-left">Sacola</SheetTitle>
         </SheetHeader>
 
-        {products.map((product) => (
-          <div key={product.id}>
-            <p>
-              {product.name} - {product.quantity}
-            </p>
-          </div>
-        ))}
+        <div className="py-5">
+          {products.map((product) => (
+            <CartProductItem key={product.id} product={product} />
+          ))}
+        </div>
       </SheetContent>
     </Sheet>
   );
