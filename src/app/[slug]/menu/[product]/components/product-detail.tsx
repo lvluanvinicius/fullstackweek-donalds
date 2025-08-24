@@ -24,7 +24,7 @@ interface ProductDetailsProps {
 
 const ProductDetails = ({ product }: ProductDetailsProps) => {
   const { Restaurant } = product;
-  const { toggleCart } = useCart();
+  const { toggleCart, addProcut } = useCart();
 
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -41,6 +41,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
   };
 
   const handleAddToCart = () => {
+    addProcut({ ...product, quantity });
     toggleCart();
   };
 

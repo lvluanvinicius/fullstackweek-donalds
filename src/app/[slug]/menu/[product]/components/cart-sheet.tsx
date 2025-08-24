@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sheet";
 
 const CartSheet = () => {
-  const { toggleCart, isOpen } = useCart();
+  const { toggleCart, isOpen, products } = useCart();
 
   return (
     <Sheet open={isOpen} onOpenChange={toggleCart}>
@@ -19,6 +19,14 @@ const CartSheet = () => {
           <SheetTitle>Tete</SheetTitle>
           <SheetDescription>Tete</SheetDescription>
         </SheetHeader>
+
+        {products.map((product) => (
+          <div key={product.id}>
+            <p>
+              {product.name} - {product.quantity}
+            </p>
+          </div>
+        ))}
       </SheetContent>
     </Sheet>
   );
