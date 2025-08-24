@@ -11,14 +11,14 @@ interface CartItemProps {
 }
 
 const CartProductItem = ({ product }: CartItemProps) => {
-  const { addProcut, decreaseProductQuantity } = useCart();
+  const { decreaseProductQuantity, increaseProductQuantity } = useCart();
 
   const handleIncreaseQuantity = () => {
     decreaseProductQuantity(product.id);
   };
 
   const handleAddToCart = () => {
-    addProcut(product);
+    increaseProductQuantity(product.id);
   };
 
   return (

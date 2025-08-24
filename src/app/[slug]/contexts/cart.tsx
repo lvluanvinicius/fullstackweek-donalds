@@ -14,6 +14,7 @@ interface ICartContext {
   toggleCart: () => void;
   addProcut: (product: CartProduct) => void;
   decreaseProductQuantity: (productId: string) => void;
+  increaseProductQuantity: (productId: string) => void;
 }
 
 export const CartContext = createContext<ICartContext>({
@@ -22,6 +23,7 @@ export const CartContext = createContext<ICartContext>({
   toggleCart: () => {},
   addProcut: () => {},
   decreaseProductQuantity: () => {},
+  increaseProductQuantity: () => {},
 });
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -56,11 +58,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const decreaseProductQuantity = (productId: string) => {
     setProducts((prev) => {
       return prev.map(function (pr) {
-        if (pr.id === productId) {
-          return { ...pr, quantity: pr.quantity - 1 };
+        if (pr.id !== productId) {
+          return pr;
         }
 
-        return pr;
+        return { ...pr, quantity: pr.quantity - 1 <= 0 ? 1 : pr.quantity - 1 };
+      });
+    });
+  };
+
+  const increaseProductQuantity = (productId: string) => {
+    setProducts((prev) => {
+      return prev.map(function (pr) {
+        if (pr.id !== productId) {
+          return pr;
+        }
+
+        return { ...pr, quantity: pr.quantity + 1 };
       });
     });
   };
@@ -73,6 +87,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         toggleCart,
         addProcut,
         decreaseProductQuantity,
+        increaseProductQuantity,
       }}
     >
       {children}
