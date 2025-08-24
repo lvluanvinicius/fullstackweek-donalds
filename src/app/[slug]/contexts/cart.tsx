@@ -31,7 +31,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const addProcut = (product: CartProduct) => {
-    setProducts((prev) => [...prev, product]);
+    const productExists = products.some((pr) => pr.id === product.id);
+
+    if (!productExists) {
+      return setProducts((prev) => [...prev, product]);
+    }
+
+    setProducts((prev) => {
+      return prev.map((pr) => {
+        if (pr.id) {
+          return {
+            ...pr,
+            quantity: pr.quantity + product.quantity,
+          };
+        }
+
+        return pr;
+      });
+    });
   };
 
   return (
