@@ -37,7 +37,7 @@ const RestaurantHeader = ({ restaurant }: RestaurantHeaderProps) => {
       <Button
         variant={"secondary"}
         size={"icon"}
-        className="absolute right-0 top-4 z-50 rounded-full"
+        className="absolute right-4 top-4 z-50 rounded-full"
       >
         <ScrollTextIcon />
       </Button>
