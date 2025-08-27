@@ -105,13 +105,13 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                 <ChefHatIcon />
                 <h4 className="font-semibold">Ingredientes</h4>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <div className="text-sm text-muted-foreground">
                 <ul className="list-disc px-5 text-sm text-muted-foreground">
                   {product.ingredients.map((ingredient) => (
-                    <li key={ingredient}> {ingredient.trim()}</li>
+                    <li key={ingredient}>{ingredient.trim()}</li>
                   ))}
                 </ul>
-              </p>
+              </div>
             </div>
           </ScrollArea>
         </div>
