@@ -1,10 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ConsumptionMethod } from "@prisma/client";
+import { LoaderCircle } from "lucide-react";
+import { useParams, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { PatternFormat } from "react-number-format";
+import { toast } from "sonner";
 import { z } from "zod";
 
+import { useCart } from "@/app/[slug]/contexts/cart";
 import { isValidCpf } from "@/app/[slug]/helpers/cpf";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +25,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+
+import { createOrder } from "../../actions/create-order-action";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -46,13 +53,40 @@ const FinishOrderDialog = ({
   isOpen: boolean;
   setOpen: (state: boolean) => void;
 }) => {
+  const { slug } = useParams<{ slug: string }>();
+  const { products } = useCart();
+  const searchParams = useSearchParams();
+  const consumptionMethod = searchParams.get("consumptionMethod");
+
+  const [processing, setProcessing] = useState<boolean>(false);
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     shouldUnregister: true,
   });
 
-  const handleOnSubmit = (data: FormSchemaType) => {
-    console.log(data);
+  const handleOnSubmit = async ({ cpf, name }: FormSchemaType) => {
+    try {
+      setProcessing(true);
+      await new Promise((resolver) => setTimeout(resolver, 2000));
+
+      await createOrder({
+        customerCpf: cpf,
+        customerName: name,
+        consumptionMethod: consumptionMethod as ConsumptionMethod,
+        products: products.map((prod) => ({
+          id: prod.id,
+          quantity: prod.quantity,
+        })),
+        slug,
+      });
+
+      toast.success("Pedido efetuado com sucesso.");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setProcessing(false);
+    }
   };
 
   return (
@@ -90,10 +124,11 @@ const FinishOrderDialog = ({
               )}
             >
               <span>Seu CPF</span>
-              <PatternFormat
+              <Input
+                type="text"
                 placeholder="Digite seu CPF..."
-                format="###.###.###-##"
-                customInput={Input}
+                // format="###.###.###-##"
+                // customInput={Input}
                 {...form.register("cpf")}
               />
               {form.formState.errors.cpf && (
@@ -108,8 +143,15 @@ const FinishOrderDialog = ({
                 type="submit"
                 variant={"destructive"}
                 className="rounded-full"
+                disabled={processing}
               >
-                Finalizar
+                {processing ? (
+                  <>
+                    <LoaderCircle className="h-4 w-4 animate-spin" /> Aguarde...
+                  </>
+                ) : (
+                  "Finalizar"
+                )}
               </Button>
               <DrawerClose asChild>
                 <Button variant="secondary" className="w-full rounded-full">

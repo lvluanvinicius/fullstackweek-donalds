@@ -3,6 +3,8 @@ import "./globals.css";
 import { Metadata } from "next";
 import { Geist } from "next/font/google";
 
+import { Toaster } from "@/components/ui/sonner";
+
 import { CartProvider } from "./[slug]/contexts/cart";
 
 const poppins = Geist({
@@ -25,6 +27,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} antialiased`}>
         <CartProvider>{children}</CartProvider>
+
+        <Toaster />
       </body>
     </html>
   );

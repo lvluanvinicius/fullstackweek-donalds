@@ -58,6 +58,8 @@ model Order {
   total             Float
   status            OrderStatus       @default(PENDING)
   restaurantId      String
+  customerName      String
+  customerCpf       String
   consumptionMethod ConsumptionMethod
   orderProduct      OrderProduct[]
   Restaurant        Restaurant        @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
